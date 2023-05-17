@@ -83,7 +83,7 @@ public:
 				else if (events[i].events & EPOLLIN)
 					this->OnRecv(fd);
 				else if (events[i].events & EPOLLERR)
-					this->OnClose(fd); // 关闭客户端连接
+					this->OnClose(fd);
 			}
 		}
 	}
@@ -118,7 +118,7 @@ public:
 			n = read(fd, buf, sizeof(buf));
 			if (n == -1) {
 				if (errno == EAGAIN || errno == EWOULDBLOCK)
-					break;// 没有更多的数据可读，跳出循环
+					break;
 				else {
 					if (this->readerr)
 						this->readerr(fd);
@@ -155,9 +155,8 @@ void PrintReadError(FD fd) {
 	printf("fd : %d read error\n", fd);
 }
 
-// 主函数，创建Epoll对象并调用其方法
 int main() {
-	Epoll epoll(8888, PrintMsg, PrintReadError); // 创建Epoll对象
-	epoll.run(); // 等待事件发生，并处理事件
+	Epoll epoll(8888, PrintMsg, PrintReadError);
+	epoll.run();
 	return 0;
 }
